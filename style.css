@@ -1,0 +1,41 @@
+/* General reset and font */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+/* Body styling */
+body {
+  background-color: #0f0f0f;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* Header styling */
+h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+/* Webcam video */
+video#webcam {
+  border: 4px solid #00ff88;
+  border-radius: 12px;
+  width: 640px;
+  height: 480px;
+  object-fit: cover;
+}
+
+/* Status text (optional) */
+#status {
+  margin-top: 20px;
+  font-size: 1.2rem;
+  color: #00ff88;
+}
