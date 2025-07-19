@@ -1,13 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Tab Name</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <h1>Content</h1>
-  <video id="webcam" autoplay playsinline width="640" height="480"></video>
-  <script src="script.js"></script>
-</body>
+  <div class="stars"></div>
+  <div class="shooting-star"></div>
+  <div class="shooting-star"></div>
+  <div class="shooting-star"></div>
+  <div class="shooting-star"></div>
+  <div class="shooting-star"></div>
+  
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>anyID</title> <! Tab Name -->
+    <link rel="stylesheet" href="style.css" />  <! Allows css style sheet to be used -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <style>
+    @font-face {
+      font-family: 'TT Chocolates';
+      src: url('./fonts/TTChocolates-Regular.woff2') format('woff2'),
+           url('./fonts/TTChocolates-Regular.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    body {
+      font-family: 'TT Chocolates', sans-serif;
+      background-color: #1d1d1d;
+    }
+    </style>
+  </head>
+
+  <body class="bg-[#1d1d1d] text-black">
+    <div class="bg-[#1d1d1d] w-full flex items-center justify-between p-4" id="header">
+      <div class = "justify-start h-auto w-32">
+        <img src="static/anyID.png" alt="logo">
+        
+      </div>
+      
+      <div class="flex gap-6" id="header">
+        <a class= "text-white " href="index.html">Home</a>
+        <a class= "text-white " href="about.html">About Us</a>
+        <a class= "text-white " href="product.html">Our Product</a>
+      </div>
+    </div>
+
+
+    <!-- Freda -->
+    <section class="px-6 py-20 lg:py-10 max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-12">
+      <!-- Left content -->
+      <div class="max-w-2xl">
+        <h1 class="text-4xl sm:text-5xl font-bold mb-9" data-aos="fade-up" data-aos-anchor-placement="center-bottom">
+          <span class="text-7xl text-white">ANY ID</span>
+          <span class="text-4xl text-gray-400"> - a better way to secure, with anything you can think of.</span>
+        </h1>
+        <p class="text-base text-gray-300 mb-8" data-aos="fade-up" ata-aos-anchor-placement="center-bottom">
+          With Any ID, we’re redefining what secure access means in the digital age. Harnessing the power of real-time computer vision, our platform lets you set your own personalised unlock item; anything from a canned drink to your grandmother’s ring, captured dynamically through your device’s camera. Whether you're securing your workspace or pausing a session, Any ID ensures that only your current chosen item can unlock access. No passwords. No pins. Just you and your trusted object. It's access, reimagined.
+        </p>
+        <a href="product.html" class="inline-flex items-center gap-2 mr-4 px-6 py-3 border border-white text-white rounded-full hover:bg-white hover:text-black transition-colors duration-500 ease-in" data-aos="fade-up" data-aos-delay="300">
+          Start locking
+        </a>
+        <a href="about.html" class="inline-flex items-center gap-2 px-6 py-3 border border-white text-white rounded-full hover:bg-white hover:text-black transition-colors duration-500 ease-in" data-aos="fade-up" data-aos-delay="300">
+          Behind the story
+        </a>
+      </div>
+
+      <!-- Right image -->
+      <div class="w-full">
+        <img src="static/lock.png" alt="AnyID Preview" class="w-full" data-aos="fade-down" ata-aos-anchor-placement="center-bottom" data-aos-delay="200">
+      </div>
+    </section>  
+    <div class="p-25 text-center min-h-md">
+  <div class="text-5xl text-center text-white p-10">
+    <h1">Reasons to Choose Lock In for</h1>
+    <h1 class="text-[#666666]">Your Security</h1>
+  </div>
+  <p class="text-lg text-[#666666] py-10">
+    Using Lock In enables users to use anything to securely lock devices. The
+    possibilities are endless.
+  </p>
+</div>
+
+  <div class="p-10 text-white justify-items-center">
+    <div class="flex items-center text-center gap-20 ">
+      <div
+        class="flex flex-col max-w-xs transition duration-300 hover:scale-125 hover:text-[#873D48]"
+      >
+        <p class="text-9xl p-10">1.</p>
+        <p>
+          Step 1: Allow camera access to your PC to use AnyID's AI recognition
+          lock -- anywhere, anytime.
+        </p>
+      </div>
+      <div
+        class="flex flex-col max-w-xs transition duration-300 hover:scale-125 hover:text-[#873D48]"
+      >
+        <h2 class="text-9xl p-10">2.</h2>
+        <p>
+          Step 2: Click "Start Locking" to scan an object you currently possess
+          and save it as your current lock.
+        </p>
+      </div>
+      <div
+        class="flex flex-col max-w-xs transition duration-300 hover:scale-125 hover:text-[#873D48]"
+      >
+        <h2 class="text-9xl p-8">3.</h2>
+        <p>
+          Step 1: AnyID will lock your PC to prevent any unwanted external
+          interference to your PC when you are absent. Go on that toilet run worry
+          free!
+        </p>
+      </div>
+    </div>
+  </div>
+    
+    <canvas id="canvas" width="640" height="480" ></canvas> <! canvas takes a screenshot of the camera -->
+
+    <script src="https://docs.opencv.org/master/opencv.js" ></script> <! loads openCV asynchronously (in the backgound) and onload will call once the script is ready -->
+    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+      AOS.init();
+    </script>
+  </body>
 </html>

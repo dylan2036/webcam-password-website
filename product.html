@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+   
+  
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>anyID</title> <! Tab Name -->
+    <link rel="stylesheet" href="style.css" />  <! Allows css style sheet to be used -->
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body class="bg-[#1d1d1d] text-black">
+    <div class="bg-[#1d1d1d] w-full flex items-center justify-between p-4" id="header">
+      <div class = "justify-start h-auto w-32">
+        <img src="static/anyID.png" alt="logo">
+        
+      </div>
+      
+      <div class="flex gap-6" id="header">
+        <a class= "text-white " href="index.html">Home</a>
+        <a class= "text-white " href="about.html">About Us</a>
+        <a class= "text-white " href="product.html">Our Product</a>
+      </div>
+    </div>
+    
+    <section class="px-1 py-6 lg:py-2 max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-12">
+      <div class="max-w-2xl">
+        <div class="flex justify-center items-center">
+            
+          </div>
+          
+        <h1 class="text-6xl sm:text-6xl font-bold mb-6">
+            <span class="text-xl text-white">
+              Position your item in the capture area to start scanning.
+            </span>
+          </h1>
+          
+          <!-- White capture box -->
+          <div class="w-full h-80 border-4 border-white rounded-lg mb-8"></div>
+          
+          <div class="flex gap-10 justify-center">
+            <a href="placeholder-to-lock-page" class="inline-flex items-center gap-20 px-7 py-4 border border-white text-white rounded-full hover:bg-white hover:text-black transition">
+              Set Lock Object
+            </a>
+            <a href="placeholder-to-unlock-page" class="inline-flex items-center gap-20 px-8 py-4 border border-white text-white rounded-full hover:bg-white hover:text-black transition">
+              Unlock Screen
+            </a>
+          </div>
+      </div>
+    </section>
+    
+    <canvas id="canvas" width="640" height="480" ></canvas> <! canvas takes a screenshot of the camera -->
+
+    <script src="https://docs.opencv.org/master/opencv.js" ></script> <! loads openCV asynchronously (in the backgound) and onload will call once the script is ready -->
+    <script src="script.js"></script> 
+  </body>
+</html>
