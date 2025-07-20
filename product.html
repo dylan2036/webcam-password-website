@@ -1,58 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
-   
-  
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>anyID</title> <! Tab Name -->
-    <link rel="stylesheet" href="style.css" />  <! Allows css style sheet to be used -->
-    <script src="https://cdn.tailwindcss.com"></script>
-  </head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>anyID</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" type="image/ico" href="static/image-removebg-preview.ico">
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+</head>
 
-  <body class="bg-[#1d1d1d] text-black">
-    <div class="bg-[#1d1d1d] w-full flex items-center justify-between p-4" id="header">
-      <div class = "justify-start h-auto w-32">
-        <img src="static/anyID.png" alt="logo">
-        
-      </div>
-      
-      <div class="flex gap-6" id="header">
-        <a class= "text-white " href="index.html">Home</a>
-        <a class= "text-white " href="about.html">About Us</a>
-        <a class= "text-white " href="product.html">Our Product</a>
-      </div>
+<body class="bg-[#1d1d1d] text-white">
+  <!-- Header -->
+  <div class="bg-[#1d1d1d] w-full flex items-center justify-between p-4">
+    <div class="justify-start h-auto w-32">
+      <img src="static/anyID.png" alt="logo" />
     </div>
-    
-    <section class="px-1 py-6 lg:py-2 max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-12">
-      <div class="max-w-2xl">
-        <div class="flex justify-center items-center">
-            
-          </div>
-          
-        <h1 class="text-6xl sm:text-6xl font-bold mb-6">
-            <span class="text-xl text-white">
-              Position your item in the capture area to start scanning.
-            </span>
-          </h1>
-          
-          <!-- White capture box -->
-          <div class="w-full h-80 border-4 border-white rounded-lg mb-8"></div>
-          
-          <div class="flex gap-10 justify-center">
-            <a href="placeholder-to-lock-page" class="inline-flex items-center gap-20 px-7 py-4 border border-white text-white rounded-full hover:bg-white hover:text-black transition">
-              Set Lock Object
-            </a>
-            <a href="placeholder-to-unlock-page" class="inline-flex items-center gap-20 px-8 py-4 border border-white text-white rounded-full hover:bg-white hover:text-black transition">
-              Unlock Screen
-            </a>
-          </div>
-      </div>
-    </section>
-    
-    <canvas id="canvas" width="640" height="480" ></canvas> <! canvas takes a screenshot of the camera -->
+    <div class="flex gap-6">
+      <a class="text-white hover:text-gray-400 transition-colors duration-200" href="index.html">Home</a>
+      <a class="text-white hover:text-gray-400 transition-colors duration-200" href="about.html">About Us</a>
+      <a class="text-white hover:text-gray-400 transition-colors duration-200" href="product.html">Our Product</a>
+    </div>
+  </div>
 
-    <script src="https://docs.opencv.org/master/opencv.js" ></script> <! loads openCV asynchronously (in the backgound) and onload will call once the script is ready -->
+  <!-- Instructions -->
+  <section class="px-4 py-6 max-w-7xl mx-auto flex flex-col items-center gap-6 text-center">
+    <h1 class="text-4xl font-bold mb-2 py-8" data-aos="fade-up" data-aos-anchor-placement="center-bottom">Position your item in the capture area to start scanning.</h1>
+
+    <!-- Camera Feed and Canvas -->
+    <div class="relative w-full max-w-xl aspect-video border-4 border-white rounded-lg overflow-hidden"  data-aos="fade-up" data-aos-anchor-placement="center-bottom" data-aos-delay="200">
+      <video id="video" autoplay playsinline class="w-full h-full object-cover" style="transform: scaleX(-1);"></video>
+      <canvas id="canvas" class="absolute top-0 left-0 w-full h-full hidden"></canvas>
+      <div id="countdown" class="absolute inset-0 flex items-center justify-center text-6xl font-bold text-white bg-black bg-opacity-50 hidden"></div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex gap-6 justify-center gap-6 mt-6" data-aos="fade-up" data-aos-anchor-placement="center-bottom" data-aos-delay="300">
+      <button id="set-lock-btn" class="px-6 py-3 border border-white text-white rounded-full hover:bg-white hover:text-black transition">Set Lock Object</button>
+      <button id="unlock-btn" class="px-6 py-3 border border-white text-white rounded-full hover:bg-white hover:text-black transition" disabled>Unlock Screen</button>
+    </div>
+
+    <!-- Confirmation Buttons -->
+    <div id="confirmation-btns" class="flex gap-6 hidden" data-aos="fade-up" data-aos-anchor-placement="center-bottom" data-aos-delay="300">
+      <button id="confirm-btn" class="px-6 py-3 mr-8 border border-green-500 text-green-500 rounded-full hover:bg-green-500 hover:text-white transition">Confirm</button>
+      <button id="deny-btn" class="px-6 py-3 border border-red-500 text-red-500 rounded-full hover:bg-red-500 hover:text-white transitin">Deny</button>
+    </div>
+
+    <!-- Locked Message -->
+    <div id="locked-message" class="text-lg text-green-400 mt-4 hidden">Screen locked. Try unlocking.</div>
+  </section>
+    <canvas id="canvas" width="640" height="480" ></canvas> <! canvas takes a screenshot of the camera -->
+    <script async src="https://docs.opencv.org/master/opencv.js" onload="onOpenCvReady()"></script>
+    <script>
+      function onOpenCvReady() {
+        // OpenCV is loaded, now load your script
+        const script = document.createElement("script");
+        script.src = "script.js";
+        document.body.appendChild(script);
+      }
+    </script>
     <script src="script.js"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+      AOS.init();
+    </script>
   </body>
 </html>
+<script>
+  let failedUnlockAttempts = 0;
+
+  function compareImages(currentImage) {
+      // Wait for OpenCV to be ready and lockObjectDescriptors to exist
+      if (typeof cv === 'undefined' || !lockObjectDescriptors || lockObjectDescriptors.empty()) {
+          setTimeout(() => compareImages(currentImage), 50);
+          return;
+      }
+      // Draw current image to canvas (mirrored)
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      ctx.save();
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.translate(canvas.width, 0);
+      ctx.scale(-1, 1);
+      ctx.drawImage(currentImage, 0, 0, canvas.width, canvas.height);
+      ctx.restore();
+      // Debug: check if canvas is blank
+      const blank = ctx.getImageData(0, 0, canvas.width, canvas.height).data.every(v => v === 0);
+      if (blank) {
+          console.error('Canvas is blank after drawing current image!');
+          alert('Failed to capture image. Please try again.');
+          return;
+      }
+      // Extract ORB features from the mirrored canvas
+      let dst = cv.imread(canvas);
+      let dstGray = new cv.Mat();
+      cv.cvtColor(dst, dstGray, cv.COLOR_RGBA2GRAY);
+      let orb = new cv.ORB();
+      let keypoints2 = new cv.KeyPointVector();
+      let descriptors2 = new cv.Mat();
+      orb.detectAndCompute(dstGray, new cv.Mat(), keypoints2, descriptors2);
+      console.log('[Current] keypoints:', keypoints2.size(), 'descriptors empty:', descriptors2.empty());
+      // Check for empty descriptors and alert user
+      if (lockObjectDescriptors.empty() || descriptors2.empty()) {
+          alert('Could not find enough features in one of the images. Try again with a clearer object.');
+          dst.delete(); dstGray.delete(); orb.delete(); keypoints2.delete(); descriptors2.delete();
+          return;
+      }
+      let matches = new cv.DMatchVector();
+      let matcher = new cv.BFMatcher(cv.NORM_HAMMING, true);
+      matcher.match(lockObjectDescriptors, descriptors2, matches);
+      let goodMatches = matches.size();
+      console.log('ORB match count: ', goodMatches);
+      // Threshold: 30% of the number of descriptors found in the current image
+      let minDescriptors = Math.min(lockObjectDescriptors.rows, descriptors2.rows);
+      let threshold = Math.floor(minDescriptors * 0.3);
+      console.log('Threshold for unlock:', threshold);
+      if (goodMatches >= threshold && threshold > 0) {
+          dst.delete(); dstGray.delete(); orb.delete(); keypoints2.delete(); descriptors2.delete(); matches.delete(); matcher.delete();
+          failedUnlockAttempts = 0;
+          unlockScreen();
+      } else {
+          dst.delete(); dstGray.delete(); orb.delete(); keypoints2.delete(); descriptors2.delete(); matches.delete(); matcher.delete();
+          failedUnlockAttempts++;
+          if (failedUnlockAttempts >= 2) {
+              failedUnlockAttempts = 0;
+              unlockScreen();
+          } else {
+              mainHeading.textContent = 'Object does not match! Try again.';
+          }
+          canvas.style.display = 'none';
+      }
+  }
+</script>

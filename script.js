@@ -38,14 +38,18 @@ async function countdown(action) {
     countdownElement.textContent = "Capturing...";
     await new Promise(resolve => setTimeout(resolve, 500));
     countdownElement.style.display = 'none';
-    // Capture image to canvas
+    // Capture mirrored image to canvas
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
+    ctx.save();
+    ctx.translate(canvas.width, 0);
+    ctx.scale(-1, 1);
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    ctx.restore();
     if (action === 'set') {
         showConfirmation();
     } else if (action === 'unlock') {
-        compareImages();
+        compareImages(video);
     }
 }
 
@@ -112,11 +116,27 @@ function compareImages() {
 
     console.log("ORB match count: ", goodMatches);
 
-    // Threshold: adjust as needed (start with 15)
-    if (goodMatches > 200) {
-        unlockScreen();
+    // Threshold: 30% of the number of descriptors found in the current image
+    let minDescriptors = Math.min(lockObjectDescriptors.rows, descriptors2.rows);
+    let threshold = Math.floor(minDescriptors * 0.3);
+    console.log('Threshold for unlock:', threshold);
+    if (goodMatches >= threshold && threshold > 0) {
+        failedUnlockAttempts = 0;
+        unlockScreen(); // Only successful unlock exits fullscreen
     } else {
-        alert("Object does not match! Try again.");
+        failedUnlockAttempts++;
+        const mainHeading = document.getElementById('main-heading');
+        if (failedUnlockAttempts >= 2) {
+            failedUnlockAttempts = 0;
+            if (mainHeading) {
+                mainHeading.textContent = 'Position your item in the capture area to start scanning.';
+            }
+        } else {
+            if (mainHeading) {
+                mainHeading.textContent = 'Object does not match! Try again.';
+            }
+        }
+        // Do NOT call unlockScreen here, so fullscreen is not exited on failure
         canvas.style.display = 'none';
     }
 }
@@ -125,9 +145,31 @@ function compareImages() {
 
 // Lock the screen
 function lockScreen() {
+    // Reset heading when locking
+    const mainHeading = document.getElementById('main-heading');
+    if (mainHeading) {
+        mainHeading.textContent = 'Position your item in the capture area to start scanning.';
+    }
+    // Hide error message when locking
+    const errorMessage = document.getElementById('error-message');
+    if (errorMessage) {
+        errorMessage.textContent = '';
+        errorMessage.style.display = 'none';
+    }
+    // Make the camera section full screen when locked
+    const section = document.querySelector('section');
+    if (section.requestFullscreen) {
+        section.requestFullscreen();
+    } else if (section.webkitRequestFullscreen) { // Safari
+        section.webkitRequestFullscreen();
+    } else if (section.msRequestFullscreen) { // IE11
+        section.msRequestFullscreen();
+    }
+    console.log('Screen is now locked');
     isLocked = true;
-    setLockBtn.disabled = true;
+    setLockBtn.style.display = 'none';
     unlockBtn.disabled = false;
+    unlockBtn.classList.add('mx-auto', 'block');
     confirmationBtns.style.display = 'none';
     canvas.style.display = 'none';
     video.style.display = 'block';
@@ -136,12 +178,25 @@ function lockScreen() {
 
 // Unlock the screen
 function unlockScreen() {
+    // Exit full screen when unlocked
+    if (document.fullscreenElement) {
+        document.exitFullscreen();
+    } else if (document.webkitFullscreenElement) { // Safari
+        document.webkitExitFullscreen();
+    } else if (document.msFullscreenElement) { // IE11
+        document.msExitFullscreen();
+    }
+    console.log('Screen is now unlocked');
     isLocked = false;
-
-    setLockBtn.disabled = false;
+    setLockBtn.style.display = '';
     unlockBtn.disabled = true;
+    unlockBtn.classList.remove('mx-auto', 'block');
     lockedMessage.style.display = 'none';
-    alert("Screen unlocked successfully!");
+    // Show unlock success in heading instead of alert
+    const mainHeading = document.getElementById('main-heading');
+    if (mainHeading) {
+        mainHeading.textContent = 'Screen unlocked successfully!';
+    }
 }
 
 // Event listeners
@@ -150,7 +205,7 @@ unlockBtn.addEventListener('click', () => countdown('unlock'));
 confirmBtn.addEventListener('click', () => {
     lockScreen();
     canvas.style.display = 'none';
-    setLockBtn.style.display = '';
+    // setLockBtn.style.display = ''; // Remove this line to prevent showing the button after locking
     unlockBtn.style.display = '';
 });
 denyBtn.addEventListener('click', () => {
